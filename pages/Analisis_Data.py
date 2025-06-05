@@ -222,7 +222,7 @@ if st.button("📂 Analisis Dataset"):
 
            # Split data: 20% train, 80% test
             X_train_raw, X_test_raw, y_train, y_test = train_test_split(
-                X, y, test_size=0.8, random_state=42, stratify=y
+                X, y, test_size=0.2, random_state=42, stratify=y
             )
 
             # Pisahkan kolom numerik dan kategorikal pada data latih
@@ -245,6 +245,38 @@ if st.button("📂 Analisis Dataset"):
             # Terapkan SMOTE pada data latih
             smote = SMOTE(random_state=42, k_neighbors=1)
             X_train_resampled, y_train_resampled = smote.fit_resample(X_train_final, y_train)
+
+            # Visualisasi distribusi target setelah SMOTE
+            styled_header("Distribusi Target Setelah SMOTE")
+
+            resampled_counts = y_train_resampled.value_counts().reset_index()
+            resampled_counts.columns = ["Label", "Count"]
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                fig_resampled_bar = px.bar(
+                    resampled_counts,
+                    x="Label",
+                    y="Count",
+                    title="Distribusi Target Setelah SMOTE - Barplot",
+                    color="Label",
+                    color_discrete_sequence=px.colors.qualitative.Set2
+                )
+                st.plotly_chart(fig_resampled_bar, use_container_width=True)
+
+            with col2:
+                fig_resampled_pie = px.pie(
+                    resampled_counts,
+                    names="Label",
+                    values="Count",
+                    title="Distribusi Target Setelah SMOTE - Pie Chart",
+                    color_discrete_sequence=px.colors.qualitative.Set2,
+                    hole=0.4
+                )
+                fig_resampled_pie.update_traces(textposition='inside', textinfo='percent')
+                st.plotly_chart(fig_resampled_pie, use_container_width=True)
+
 
             # Latih model
             model = RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42)
