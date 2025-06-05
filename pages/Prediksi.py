@@ -87,9 +87,9 @@ model = load_model()
 # --------------------- Form Input ---------------------
 
 penguasaan = st.selectbox("**PENGUASAAN TANAH**", ["Penggarap", "Pemilik", "Fasos Fasum", "Aset Desa", "Pemerintah"])
-kepemilikan = st.selectbox("**KEPEMILIKAN TANAH**", ["Terdaftar", "Belum Terdaftar", "Terdaftar (HGU Baru)", "Tidak Terdaftar", "Terdaftar (tumpang tindih)"])
-penggunaan = st.selectbox("**PENGGUNAAN TANAH**", ["Tegalan", "Rumah Tinggal", "Kebun Campuran", "Mushola", "Masjid", "PAUD", "Madrasah", "Pangkalan Ojek", "Kebun", "Lainnya"])
-pemanfaatan = st.selectbox("**PEMANFAATAN TANAH**", ["Tanaman semusim", "Tempat tinggal", "Produksi pertanian", "Sarana Ibadah", "Sarana Pendidikan", "Olahraga", "Usaha", "Tanaman tahunan"])
+kepemilikan = st.selectbox("**KEPEMILIKAN TANAH**", ["Terdaftar (dari areal penyisihan HGU Lama)", "Belum Terdaftar", "Terdaftar dalam HGU baru (diluar penyisihan)", "Terdaftar (di luar areal penyisihan / tumpang tindih dengan HGU baru)","Terdaftar","Tidak terdaftar (dalam areal penyisihan HGU Lama)"])
+penggunaan = st.selectbox("**PENGGUNAAN TANAH**", ["Tegalan", "Rumah Tinggal", "Kebun Campuran", "Mushola", "Masjid", "PAUD", "Posyandu","Madrasah", "Pangkalan Ojek", "Kebun","Madrasah Ibtidayah","Lapang Poli", "Bangunan Rekreasi","Fasos/Fasum/lainnya","Lapang Bola"])
+pemanfaatan = st.selectbox("**PEMANFAATAN TANAH**", ["Tanaman semusim", "Tempat tinggal", "Pemanfaatan Produksi Pertanian", "Sarana Ibadah", "Sarana Pendidikan", "Olahraga", "Tempat Usaha", "Sarana Kesehatan","Pemanfaatan fasos/fasum","Tanaman Tahunan"])
 luas = st.number_input("**LUAS TANAH (m²)** _maximum 50 ha_", min_value=1, max_value=500000, value=1000, step=1)
 
 # --------------------- Tombol Prediksi ---------------------
