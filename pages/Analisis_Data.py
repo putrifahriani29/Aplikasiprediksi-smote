@@ -15,6 +15,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix, classification_report
+from imblearn.over_sampling import SMOTE
 
 # Set layout Streamlit
 st.set_page_config(layout="wide", page_title="Analisis Dataset", initial_sidebar_state="auto")
@@ -219,30 +220,46 @@ if st.button("📂 Analisis Dataset"):
             X = df.drop(columns=["POTENSI TOL"])
             y = df["POTENSI TOL"]
 
-            numerical_cols = X.select_dtypes(include=np.number).columns.tolist()
-            categorical_cols = X.select_dtypes(include=['object', 'category']).columns.tolist()
-
-           
-            ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
-
-            X_cat_encoded = ohe.fit_transform(X[categorical_cols])
-            encoded_cat_cols = ohe.get_feature_names_out(categorical_cols)
-            X_cat_df = pd.DataFrame(X_cat_encoded, columns=encoded_cat_cols, index=X.index)
-            X_final = pd.concat([X[numerical_cols], X_cat_df], axis=1)
-
-            X_train, X_test, y_train, y_test = train_test_split(
-                X_final, y, test_size=0.2, random_state=42, stratify=y
+           # Split data: 20% train, 80% test
+            X_train_raw, X_test_raw, y_train, y_test = train_test_split(
+                X, y, test_size=0.8, random_state=42, stratify=y
             )
 
-            model = RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42)
-            model.fit(X_train, y_train)
-            y_pred = model.predict(X_test)
+            # Pisahkan kolom numerik dan kategorikal pada data latih
+            numerical_cols = X_train_raw.select_dtypes(include=np.number).columns.tolist()
+            categorical_cols = X_train_raw.select_dtypes(include=['object', 'category']).columns.tolist()
 
+            # One-hot encoding: fit di data train, transform di train dan test
+            ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
+            X_train_cat_encoded = ohe.fit_transform(X_train_raw[categorical_cols])
+            X_test_cat_encoded = ohe.transform(X_test_raw[categorical_cols])
+
+            encoded_cat_cols = ohe.get_feature_names_out(categorical_cols)
+            X_train_cat_df = pd.DataFrame(X_train_cat_encoded, columns=encoded_cat_cols, index=X_train_raw.index)
+            X_test_cat_df = pd.DataFrame(X_test_cat_encoded, columns=encoded_cat_cols, index=X_test_raw.index)
+
+            # Gabungkan numerik dan kategorikal encoded
+            X_train_final = pd.concat([X_train_raw[numerical_cols], X_train_cat_df], axis=1)
+            X_test_final = pd.concat([X_test_raw[numerical_cols], X_test_cat_df], axis=1)
+
+            # Terapkan SMOTE pada data latih
+            smote = SMOTE(random_state=42)
+            X_train_resampled, y_train_resampled = smote.fit_resample(X_train_final, y_train)
+
+            # Latih model
+            model = RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42)
+            model.fit(X_train_resampled, y_train_resampled)
+
+            # Prediksi pada data uji
+            y_pred = model.predict(X_test_final)
+
+            # Simpan ke session state
             st.session_state['model'] = model
-            st.session_state['X_final'] = X_final
+            st.session_state['X_final'] = pd.concat([X_train_final, X_test_final])  # jika perlu semua data
             st.session_state['classes'] = model.classes_
 
-            styled_header("Confusion Matrix")
+            # Tampilkan hasil evaluasi
+            styled_header("Confusion Matrix after SMOTE")
             tab1, tab2 = st.tabs(["Confusion Matrix", "Classification Report"])
 
             with tab1:
@@ -255,7 +272,7 @@ if st.button("📂 Analisis Dataset"):
                 st.pyplot(fig_cm)
 
             with tab2:
-                st.markdown("### Classification Report")
+                st.markdown("### Classification Report after SMOTE")
                 report = classification_report(y_test, y_pred, output_dict=True, target_names=model.classes_)
                 report_df = pd.DataFrame(report).transpose()
                 st.dataframe(report_df)
