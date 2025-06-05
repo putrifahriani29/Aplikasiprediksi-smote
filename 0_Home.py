@@ -111,4 +111,4 @@ tampilkan_tanggal()
 display_data_info()
 
 # Info message with a link to the dataset
-st.info('Dokumentasi project ini dapat dilihat di GitHub: [AplikasiPotensiTOLSMOTE](https://github.com/putrifahriani29/Aplikasiprediksi-smote)')
+st.info('Dokumentasi project ini dapat diakses melalui GitHub: [AplikasiPotensiTOLSMOTE](https://github.com/putrifahriani29/Aplikasiprediksi-smote)')
