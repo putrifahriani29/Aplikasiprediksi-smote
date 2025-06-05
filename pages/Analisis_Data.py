@@ -259,6 +259,7 @@ if st.button("📂 Analisis Dataset"):
                     resampled_counts,
                     x="Label",
                     y="Count",
+                    color="Label",
                     title="Distribusi POTENSI TOL Setelah SMOTE - Barplot",
                     color_discrete_sequence=px.colors.qualitative.Set2
                 )
