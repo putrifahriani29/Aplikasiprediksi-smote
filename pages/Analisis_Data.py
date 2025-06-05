@@ -243,7 +243,7 @@ if st.button("📂 Analisis Dataset"):
             X_test_final = pd.concat([X_test_raw[numerical_cols], X_test_cat_df], axis=1)
 
             # Terapkan SMOTE pada data latih
-            smote = SMOTE(random_state=42)
+            smote = SMOTE(random_state=42, k_neighbors=1)
             X_train_resampled, y_train_resampled = smote.fit_resample(X_train_final, y_train)
 
             # Latih model
