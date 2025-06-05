@@ -247,7 +247,7 @@ if st.button("📂 Analisis Dataset"):
             X_train_resampled, y_train_resampled = smote.fit_resample(X_train_final, y_train)
 
             # Visualisasi distribusi target setelah SMOTE
-            styled_header("Distribusi Target Setelah SMOTE")
+            styled_header("Distribusi TARGET Setelah SMOTE")
 
             resampled_counts = y_train_resampled.value_counts().reset_index()
             resampled_counts.columns = ["Label", "Count"]
@@ -259,8 +259,7 @@ if st.button("📂 Analisis Dataset"):
                     resampled_counts,
                     x="Label",
                     y="Count",
-                    title="Distribusi Target Setelah SMOTE - Barplot",
-                    color="Label",
+                    title="Distribusi POTENSI TOL Setelah SMOTE - Barplot",
                     color_discrete_sequence=px.colors.qualitative.Set2
                 )
                 st.plotly_chart(fig_resampled_bar, use_container_width=True)
@@ -270,7 +269,7 @@ if st.button("📂 Analisis Dataset"):
                     resampled_counts,
                     names="Label",
                     values="Count",
-                    title="Distribusi Target Setelah SMOTE - Pie Chart",
+                    title="Distribusi POTENSI TOL Setelah SMOTE - Pie Chart",
                     color_discrete_sequence=px.colors.qualitative.Set2,
                     hole=0.4
                 )
