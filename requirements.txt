@@ -6,3 +6,4 @@ plotly
 tabulate
 matplotlib
 seaborn
+imblearn
