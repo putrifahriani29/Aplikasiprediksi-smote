@@ -1,8 +1,9 @@
-streamlit==1.34.0
 scikit-learn==1.2.2
 imbalanced-learn==0.10.1
 pandas
 numpy
+streamlit
+pickle
 plotly
 tabulate
 matplotlib
