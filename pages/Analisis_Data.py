@@ -79,8 +79,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-st.info("Silakan unggah file CSV atau klik tombol 'Analisis Dataset'", icon="ℹ️")
-
+st.info("Silakan klik tombol 'Analisis Dataset'", icon="ℹ️")
 
 # Tombol Analisis Dataset
 if st.button("📂 Analisis Dataset"):
