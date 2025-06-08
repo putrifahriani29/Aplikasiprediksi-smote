@@ -1,13 +1,9 @@
-scikit-learn
 pandas
 numpy
 streamlit
-pickle
+scikit-learn
 plotly
 tabulate
 matplotlib
 seaborn
 imblearn
-
-
-
